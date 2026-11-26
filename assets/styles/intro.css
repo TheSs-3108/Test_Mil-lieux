@@ -1,0 +1,96 @@
+/* ==========================================================================
+   ÉCRAN D'INTRODUCTION (1er chargement de la session, page d'accueil)
+   Fond blanc, logo au centre avec un petit rebond. Durée totale : 4,2 s.
+   Chronologie : 0,3 s le logo tombe et rebondit (1,7 s) · 1,8 s le nom apparaît ·
+                 3,4 s fondu de sortie (0,8 s).
+   Entièrement piloté en CSS : l'écran disparaît même si le JavaScript est bloqué.
+   ========================================================================== */
+#intro { display: none; }
+
+.has-intro #intro {
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    animation: intro-out 0.8s ease 3.4s forwards;
+}
+
+/* Logo : on ne garde que le pictogramme (le texte du PNG est blanc, invisible sur fond blanc) */
+.intro__logo {
+    --s: 1.9;
+    width: calc(116px * var(--s));
+    height: calc(93px * var(--s));
+    overflow: hidden;
+    opacity: 0;
+    animation: intro-bounce 1.7s cubic-bezier(0.28, 0.84, 0.42, 1) 0.3s forwards;
+    will-change: transform;
+}
+.intro__logo img {
+    display: block;
+    width: calc(197px * var(--s));
+    max-width: none;
+    margin-left: calc(-44px * var(--s));
+    margin-top: calc(-5px * var(--s));
+}
+
+/* Ombre au sol qui réagit au rebond */
+.intro__shadow {
+    width: 150px;
+    height: 12px;
+    margin-top: 6px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at center, rgba(0,0,0,0.18), rgba(0,0,0,0) 70%);
+    opacity: 0;
+    animation: intro-shadow 1.7s cubic-bezier(0.28, 0.84, 0.42, 1) 0.3s forwards;
+}
+
+.intro__name {
+    margin-top: 22px;
+    text-align: center;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    opacity: 0;
+    transform: translateY(8px);
+    animation: intro-name 0.7s ease 1.8s forwards;
+}
+.intro__name strong { display: block; font-size: 1.5rem; font-weight: 600; letter-spacing: 8px; text-transform: uppercase; color: #111; }
+.intro__name span { display: block; margin-top: 6px; font-size: 0.8rem; font-weight: 300; letter-spacing: 6px; text-transform: uppercase; color: rgb(255,140,0); }
+
+@keyframes intro-bounce {
+    0%   { opacity: 0; transform: translateY(-120px) scale(0.9); }
+    25%  { opacity: 1; transform: translateY(0) scale(1.04, 0.95); }  /* impact */
+    40%  { transform: translateY(-34px) scale(0.99, 1.02); }           /* 1er rebond */
+    55%  { transform: translateY(0) scale(1.02, 0.97); }
+    70%  { transform: translateY(-12px) scale(1); }                    /* 2e rebond, plus petit */
+    82%  { transform: translateY(0); }
+    91%  { transform: translateY(-4px); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes intro-shadow {
+    0%   { opacity: 0; transform: scale(0.4); }
+    25%  { opacity: 1; transform: scale(1.1); }
+    40%  { opacity: 0.6; transform: scale(0.75); }
+    55%  { opacity: 1; transform: scale(1.05); }
+    70%  { opacity: 0.8; transform: scale(0.9); }
+    100% { opacity: 1; transform: scale(1); }
+}
+@keyframes intro-name { to { opacity: 1; transform: none; } }
+@keyframes intro-out  { to { opacity: 0; visibility: hidden; pointer-events: none; } }
+
+@media (max-width: 480px) {
+    .intro__logo { --s: 1.4; }
+    .intro__name strong { font-size: 1.15rem; letter-spacing: 6px; }
+    .intro__name span { letter-spacing: 4px; }
+}
+
+/* Accessibilité : pas de rebond, simple apparition (1,8 s au total) */
+@media (prefers-reduced-motion: reduce) {
+    .has-intro #intro { animation: intro-out 0.5s ease 1.3s forwards; }
+    .intro__logo { animation: intro-fade 0.5s ease forwards; }
+    .intro__shadow { display: none; }
+    .intro__name { animation: intro-name 0.4s ease 0.4s forwards; }
+    @keyframes intro-fade { to { opacity: 1; } }
+}
