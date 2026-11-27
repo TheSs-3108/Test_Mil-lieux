@@ -1,0 +1,258 @@
+/* ==========================================================================
+   PAGE PROJET INDIVIDUELLE (pages/projets/*.html) — v14
+   1er écran : bandeau blanc (logo + flèche retour « Tous les projets »), diaporama, barre d'infos.
+   On fait défiler vers le haut pour voir la suite : texte, informations puis toutes les photos.
+   Même principe sur ordinateur, tablette et téléphone (plus de bouton « + Lire »).
+   ========================================================================== */
+html { scroll-behavior: smooth; }
+html, body.pp-body { margin: 0; background: #fff; }
+
+.pp { --nav-h: 100px; background: #fff; padding-bottom: 40px; }
+
+/* --- 1er écran --- */
+.pp-first {
+    position: relative;
+    box-sizing: border-box;
+    height: 100vh;
+    height: 100dvh;
+    min-height: 420px;
+    padding-top: var(--nav-h);   /* place du bandeau blanc fixe */
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+}
+
+/* --- Diaporama --- */
+.pp-stage {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+    overflow: hidden;
+    background: #f0f0f0;
+}
+.pp-track { display: flex; height: 100%; will-change: transform; }
+.pp-track img { height: 100%; min-width: 0; object-fit: cover; display: block; cursor: inherit; }
+
+/* zones cliquables : 25 % de la largeur de chaque côté = image précédente / suivante */
+.pp-zone {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 25%;
+    z-index: 5;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: background 0.25s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+.pp-prev { left: 0; }
+.pp-next { right: 0; }
+.pp-prev:hover, .pp-prev:focus-visible { background: linear-gradient(to right, rgba(0,0,0,0.14), rgba(0,0,0,0)); }
+.pp-next:hover, .pp-next:focus-visible { background: linear-gradient(to left, rgba(0,0,0,0.14), rgba(0,0,0,0)); }
+.pp.is-single .pp-zone { display: none; }
+
+/* --- Barre d'infos (bas du 1er écran) --- */
+.pp-bar {
+    flex: 0 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+    padding: 20px 40px 28px;
+    background: #fff;
+    color: #000;
+}
+.pp-bar__left { display: flex; flex-direction: column; gap: 5px; min-width: 220px; }
+.pp-bar__left h1 { margin: 0; font-size: 1.4rem; font-weight: 500; color: #000; }
+.pp-year { font-size: 0.9rem; color: #555; }
+.pp-bar__center { flex: 1; }
+.pp-bar__center p { margin: 0; font-size: 1.1rem; font-weight: 300; line-height: 1.5; letter-spacing: 0.5px; color: #000; }
+.pp-bar__right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; text-align: right; }
+.pp-cat { font-size: 0.8rem; color: #333; }
+
+/* petit chevron « glisser vers le haut pour voir la suite » (centré en bas du 1er écran) */
+.pp-down {
+    position: absolute;
+    left: 50%;
+    bottom: 6px;
+    width: 40px;
+    height: 22px;
+    margin-left: -20px;
+    z-index: 6;
+    opacity: 0.55;
+    transition: opacity 0.2s ease;
+}
+.pp-down::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 3px;
+    width: 12px;
+    height: 12px;
+    margin-left: -6px;
+    border-right: 2px solid rgb(255, 140, 0);
+    border-bottom: 2px solid rgb(255, 140, 0);
+    transform: rotate(45deg);
+    animation: pp-bounce 2s ease-in-out infinite;
+}
+.pp-down:hover { opacity: 1; }
+@keyframes pp-bounce { 0%, 100% { translate: 0 0; } 50% { translate: 0 4px; } }
+@media (prefers-reduced-motion: reduce) { .pp-down::before { animation: none; } }
+.pp.is-scrolled .pp-down { opacity: 0; pointer-events: none; }
+
+/* --- Suite : blocs de la page (texte, photo, deux photos, fiche technique), dans l'ordre choisi dans l'outil --- */
+.pp-more { background: #fff; color: #000; padding: 72px 40px 120px; box-sizing: border-box; }
+.pp-blocs { max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 48px; }
+.pp-bloc { margin: 0; }
+.pp-bloc--texte { max-width: 720px; }
+.pp-bloc--texte h2 { margin: 0 0 24px; font-size: 1.8rem; font-weight: 400; text-transform: uppercase; letter-spacing: 1px; color: #000; }
+.pp-bloc--texte p { margin: 0 0 20px; font-size: 0.95rem; line-height: 1.7; color: #444; font-weight: 300; }
+.pp-bloc--texte p:last-child { margin-bottom: 0; }
+.pp-bloc--photo img, .pp-bloc--photos2 img { display: block; width: 100%; height: auto; }
+.pp-bloc--moitie { width: 50%; }
+.pp-bloc--photos2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.pp-bloc--photos2 figure { margin: 0; }
+.pp-bloc--photos2:has(figure:only-of-type) { grid-template-columns: 1fr; }
+.pp-bloc figcaption, .pp-bloc__legende { margin-top: 10px; font-size: 0.8rem; color: #666; letter-spacing: 0.3px; }
+.pp-bloc__legende { grid-column: 1 / -1; margin-top: -2px; }
+.pp-facts { margin: 0; max-width: 720px; }
+.pp-facts div { display: grid; grid-template-columns: minmax(130px, 30%) 1fr; gap: 20px; padding: 10px 0; border-bottom: 1px solid #e5e5e5; }
+.pp-facts div:first-child { border-top: 1px solid #e5e5e5; }
+.pp-facts dt { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent-text, #B35F00); padding-top: 3px; }
+.pp-facts dd { margin: 0; font-size: 0.95rem; font-weight: 300; }
+
+/* --- Téléphone --- */
+@media (max-width: 768px) {
+    .pp { --nav-h: 60px; padding-bottom: 0; }
+    .pp-bar { flex-direction: column; align-items: flex-start; gap: 8px; padding: 16px 20px 28px; }
+    .pp-bar__left { min-width: 0; width: 100%; }
+    .pp-bar__left h1 { font-size: 1.1rem; }
+    .pp-bar__center { display: none; }
+    .pp-bar__right { align-items: flex-start; text-align: left; }
+    .pp-cat { font-size: 0.7rem; }
+    .pp-more { padding: 36px 25px 80px; }
+    .pp-blocs { gap: 32px; }
+    .pp-bloc--texte h2 { font-size: 1.3rem; margin-bottom: 18px; }
+    .pp-bloc--moitie { width: auto; }
+    .pp-bloc--photo, .pp-bloc--photos2 { margin-left: -25px; margin-right: -25px; }   /* photos pleine largeur d'écran */
+    .pp-bloc--photos2 { grid-template-columns: 1fr; gap: 12px; }
+    .pp-bloc figcaption, .pp-bloc__legende { padding: 0 25px; }
+    .pp-facts div { grid-template-columns: 38% 1fr; gap: 14px; }
+}
+
+/* --- Smartphone en paysage (écran bas) : barre d'infos sur UNE ligne compacte --- */
+@media (orientation: landscape) and (max-height: 500px) {
+    .pp { --nav-h: 60px; }
+    .pp-first { min-height: 340px; }
+    .pp-bar { flex-direction: row; align-items: center; gap: 16px; padding: 8px 20px 20px; }
+    .pp-bar__left { flex-direction: row; align-items: center; gap: 14px; min-width: 0; width: auto; }
+    .pp-bar__left h1 { font-size: 1rem; white-space: nowrap; }
+    .pp-bar__center { display: none; }
+    .pp-bar__right { flex-direction: row; align-items: center; gap: 14px; margin-left: auto; text-align: right; }
+    .pp-more { padding: 36px 28px 60px; }
+    .pp-bloc--texte p { font-size: 0.85rem; margin-bottom: 10px; line-height: 1.5; }
+    .pp-bloc--photo, .pp-bloc--photos2 { margin-left: 0; margin-right: 0; }
+    .pp-bloc--photos2 { grid-template-columns: 1fr 1fr; }
+    .pp-bloc--moitie { width: 50%; }
+}
+
+/* v17 — chevron « voir la suite » : zone de toucher de 44 px (le dessin ne change pas) */
+.pp-down { width: 44px; height: 44px; margin-left: -22px; bottom: -6px; }
+.pp-down::before { top: 12px; }
+/* titres de blocs et légendes : contraste suffisant */
+.pp-bloc figcaption, .pp-bloc__legende { color: var(--muted, #696969); }
+
+/* ==========================================================================
+   v17 — BLOC VIDÉO (lecteur Plyr, couleur de marque, sobre)
+   ========================================================================== */
+.pp-bloc--video { --plyr-color-main: var(--accent, #FF8C00); --plyr-video-background: #000; --plyr-font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+.pp-bloc--video video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; background: #000; }
+.pp-bloc--video .plyr { width: 100%; }
+/* en plein écran, le curseur orange (hors du lecteur) n'est plus visible : on rend le curseur normal */
+.plyr--fullscreen-active, .plyr--fullscreen-active *, video:fullscreen { cursor: auto !important; }
+.pp-bloc--video.has-error video, .pp-bloc--video.has-error .plyr { display: none; }
+.pp-video__error {
+    margin: 0;
+    padding: 48px 24px;
+    background: #f0f0f0;
+    color: var(--muted, #696969);
+    font-size: 0.9rem;
+    text-align: center;
+}
+@media (max-width: 768px) {
+    .pp-bloc--video { margin-left: -25px; margin-right: -25px; }            /* pleine largeur d'écran, comme les photos */
+}
+@media (orientation: landscape) and (max-height: 500px) {
+    .pp-bloc--video { margin-left: 0; margin-right: 0; }
+}
+
+/* ==========================================================================
+   v17 — BOUTON « RETOUR EN HAUT » (créé par projet-page.js) : carré blanc discret, chevron orange,
+   aligné sur la marge du hamburger ; visible une fois le diaporama dépassé
+   ========================================================================== */
+.pp-top {
+    position: fixed;
+    right: calc(var(--ham-gap, 10vw) + 8px);
+    bottom: 28px;
+    z-index: 900;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border: 1px solid #e5e5e5;
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px);
+    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+}
+.pp-top::before {                       /* chevron vers le haut, même dessin que le chevron « voir la suite » */
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 12px;
+    height: 12px;
+    margin: -3px 0 0 -6px;
+    border-left: 2px solid var(--accent, #FF8C00);
+    border-top: 2px solid var(--accent, #FF8C00);
+    transform: rotate(45deg);
+}
+.pp-top.is-visible { opacity: 1; visibility: visible; transform: none; }
+.pp-top:hover { border-color: var(--accent, #FF8C00); }
+@media (max-width: 768px), (orientation: landscape) and (max-height: 500px) {
+    .pp-top { bottom: 18px; width: 44px; height: 44px; }
+}
+
+/* ==========================================================================
+   v18 — lien « Voir sur la carte » (ajouté par projet-page.js sous la catégorie, si le projet est localisé)
+   ========================================================================== */
+.pp-carte {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 44px;
+    margin: -10px 0 -12px;          /* zone de toucher de 44 px sans agrandir la barre */
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+    color: var(--accent-text, #B35F00);
+}
+.pp-carte:hover span { text-decoration: underline; text-underline-offset: 4px; }
+.pp-carte svg { flex: none; }
+@media (max-width: 768px) {
+    .pp-carte { margin: -8px 0 -14px; font-size: 0.68rem; }
+}
+@media (orientation: landscape) and (max-height: 500px) {
+    .pp-carte { margin: -12px 0; }
+}

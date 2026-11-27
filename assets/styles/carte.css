@@ -1,0 +1,199 @@
+/* ==========================================================================
+   CARTE DES PROJETS (pages/carte.html) — v18
+   Même barre de filtres que la page Projets (projet.css) ; la carte occupe tout l'écran dessous.
+   Sobre : fond de carte en gris, épingles orange, fiche blanche.
+   ========================================================================== */
+html, body.carte-body { height: 100%; margin: 0; overflow: hidden; }
+
+.sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+.carte { position: fixed; top: 100px; left: 0; right: 0; bottom: 0; }
+.carte__map { position: absolute; inset: 0; background: #eeeeee; font-family: inherit; }
+.carte:focus { outline: none; }
+
+/* fond de carte IGN en niveaux de gris : les épingles orange ressortent */
+.carte__map .leaflet-tile-pane { filter: grayscale(1) contrast(0.9) brightness(1.06); }
+.leaflet-container { font: inherit; }
+.leaflet-container a { color: var(--ink, #1a1a1a); }
+
+/* ---------- épingle (zone de 44 px, dessin de 22 px) ---------- */
+.carte-pin { background: none; border: none; }
+.carte-pin span {
+    position: absolute;
+    left: 11px;
+    top: 7px;
+    width: 22px;
+    height: 22px;
+    box-sizing: border-box;
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    background: var(--accent, #FF8C00);
+    border: 2px solid #fff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+    transition: transform 0.15s ease, background 0.15s ease;
+}
+.carte-pin:hover span, .carte-pin:focus-visible span { transform: rotate(-45deg) scale(1.15); }
+.carte-pin.is-on span { background: var(--accent-text, #B35F00); transform: rotate(-45deg) scale(1.25); }
+.carte-pin:focus-visible { outline: 2px solid var(--accent-text, #B35F00); outline-offset: -4px; border-radius: 50%; }
+
+/* ---------- groupe d'épingles proches : pastille blanche cerclée d'orange avec le nombre ---------- */
+.carte-cluster { background: none; border: none; }
+.carte-cluster span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    box-sizing: border-box;
+    border-radius: 50%;
+    background: #fff;
+    border: 3px solid var(--accent, #FF8C00);
+    color: var(--ink, #1a1a1a);
+    font-size: 0.85rem;
+    font-weight: 600;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+}
+.carte-cluster:hover span { background: #fff5e8; }
+
+/* ---------- info-bulle au survol (ordinateur) ---------- */
+.leaflet-tooltip.carte-tip {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 0;
+    background: #fff;
+    color: var(--ink, #1a1a1a);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+.leaflet-tooltip.carte-tip::before { display: none; }
+
+/* ---------- zoom : carrés blancs 44 px, sobres ---------- */
+.leaflet-bar { border: none !important; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12) !important; border-radius: 0 !important; }
+.leaflet-bar a, .leaflet-bar a:hover {
+    width: 44px !important;
+    height: 44px !important;
+    line-height: 44px !important;
+    border-radius: 0 !important;
+    color: var(--ink, #1a1a1a);
+    font-weight: 300;
+    font-size: 1.4rem;
+}
+.leaflet-bar a:hover { color: var(--accent-text, #B35F00); background: #fff; }
+.leaflet-right .leaflet-control { margin-right: calc(var(--ham-gap, 10vw) + 8px); }
+.leaflet-bottom .leaflet-control-zoom { margin-bottom: 36px; }
+.leaflet-control-attribution { font-size: 10px; background: rgba(255, 255, 255, 0.8) !important; }
+
+/* ---------- fiche du projet sélectionné ---------- */
+.carte__fiche {
+    position: absolute;
+    z-index: 1000;
+    left: calc(var(--ham-gap, 10vw) + 8px);
+    top: 28px;
+    width: 330px;
+    background: #fff;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.16);
+}
+.carte__fiche[hidden] { display: none; }
+.carte__img { aspect-ratio: 3 / 2; overflow: hidden; background: #f0f0f0; }
+.carte__img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.carte__txt { padding: 18px 22px 14px; }
+.carte__txt h2 {
+    margin: 0 0 8px;
+    font-size: 1.1rem;
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    line-height: 1.3;
+    color: #000;
+}
+.carte__meta { margin: 0; font-size: 0.72rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted, #696969); }
+.carte__approx { margin: 6px 0 0; font-size: 0.75rem; color: var(--muted, #696969); font-style: italic; }
+.carte__lien {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    margin-top: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--accent-text, #B35F00);
+}
+.carte__lien:hover { text-decoration: underline; text-underline-offset: 4px; }
+.carte__fermer {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 44px;
+    height: 44px;
+    border: none;
+    background: rgba(255, 255, 255, 0.92);
+    color: var(--ink, #1a1a1a);
+    font-size: 1rem;
+    cursor: pointer;
+}
+.carte__fermer:hover { color: var(--accent-text, #B35F00); }
+
+/* ---------- aucun résultat ---------- */
+.carte__vide {
+    position: absolute;
+    z-index: 1000;
+    left: 50%;
+    top: 40px;
+    transform: translateX(-50%);
+    width: min(420px, calc(100% - 32px));
+    box-sizing: border-box;
+    margin: 0;
+    padding: 20px 24px;
+    background: #fff;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.16);
+    text-align: center;
+    color: var(--ink, #1a1a1a);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+.carte__vide[hidden] { display: none; }
+
+/* ---------- lien « Voir la carte / Voir la mosaïque » dans la barre de filtres (page Projets et Carte) ---------- */
+/* (règles dans projet.css, partagées) */
+
+/* ==========================================================================
+   TÉLÉPHONE : barre de 60 px ; la fiche devient un bandeau en bas de l'écran (photo à gauche, texte à droite)
+   ========================================================================== */
+@media (max-width: 768px) {
+    .carte { top: 60px; }
+    .carte__fiche {
+        left: 0;
+        right: 0;
+        top: auto;
+        bottom: 0;
+        width: auto;
+        display: grid;
+        grid-template-columns: 112px 1fr;
+        padding-bottom: env(safe-area-inset-bottom, 0);
+        box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.14);
+    }
+    .carte__img { aspect-ratio: auto; height: 100%; min-height: 112px; }
+    .carte__txt { padding: 12px 48px 8px 16px; }
+    .carte__txt h2 { font-size: 0.95rem; letter-spacing: 1.5px; margin-bottom: 4px; }
+    .carte__meta { font-size: 0.65rem; letter-spacing: 1px; }
+    .carte__lien { margin-top: 2px; font-size: 0.7rem; }
+    .leaflet-right .leaflet-control { margin-right: 10px; }
+    .leaflet-bottom .leaflet-control-zoom { margin-bottom: 28px; }
+    .carte-body:has(.carte__fiche:not([hidden])) .leaflet-bottom { display: none; }   /* fiche ouverte : le zoom se fait aux doigts */
+}
+@media (orientation: landscape) and (max-height: 500px) {
+    .carte { top: 56px; }
+    .carte__fiche { top: 12px; width: 280px; left: 12px; }
+    .carte__img { aspect-ratio: 16 / 7; }
+    .carte__txt { padding: 10px 16px 6px; }
+}

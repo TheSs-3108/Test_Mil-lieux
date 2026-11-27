@@ -1,0 +1,425 @@
+/* --- CONFIGURATION GLOBALE --- */
+.team-container {
+    width: 100%;
+    min-height: 100vh;
+    padding-top: 8vh; /* nav transparente + sous-menu collé en haut */
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+}
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    padding: 5vh 6vw;
+    max-width: 1600px; 
+    width: 100%;
+    margin: 0 auto;
+    transition: filter 0.6s ease;
+    cursor: none;
+}
+
+.team-grid.has-active .member-card:not(.active) {
+    filter: blur(15px) grayscale(60%);
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+/* --- LA CARTE (GALERIE) --- */
+.member-card {
+    height: 400px;
+    cursor: pointer;
+    position: relative;
+    transition: z-index 0.8s step-end;
+    z-index: 1;
+    cursor: none;
+    container-type: inline-size;
+}
+
+.member-card.active {
+    z-index: 1000;
+    transition: z-index 0s;
+}
+
+.card-inner {
+    position: absolute;
+    inset: 0;
+    background: #ffffff;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row; 
+    transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    cursor: none;
+}
+
+/* --- PHOTO VERTICALE */
+.image-container {
+    width: 100%; 
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+    transition: width 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* --- LE BLOC DE TEXTE (GALERIE) --- */
+.name-overlay {
+    position: absolute;
+    bottom: 5px;
+    right: 15px;
+    width: calc(100% - 20px);
+    max-width: 100%;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; 
+    align-items: flex-end;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.name-overlay span {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    text-transform: uppercase;
+    text-align: right;
+    display: block;
+    width: 100%;
+}
+
+/* --- TAILLE DU PRÉNOM (NOIR) --- */
+.name-overlay .firstname {
+    color: var(--accent, #FF8C00);
+    font-weight: 300;
+    font-size: clamp(0.65rem, 5.5cqi, 1rem);
+    margin-bottom: 1px;
+}
+
+/* --- TAILLE DU NOM (ORANGE) --- */
+.name-overlay .lastname {
+    color: var(--accent, #FF8C00);
+    font-weight: 900;
+    font-size: clamp(1rem, 11cqi, 2rem);
+    line-height: 1.1;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+/* --- ÉTAT DÉPLOYÉ (FICHE) --- */
+.member-card.active .card-inner {
+    position: fixed;
+    top: 50%; 
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80vw;
+    height: 70vh;
+    background: #ffffff;
+}
+
+.member-card.active .image-container {
+    width: 40%; 
+}
+
+.member-card.active .name-overlay {
+    opacity: 0;
+}
+
+/* --- CONTENU DÉTAILLÉ --- */
+.member-info {
+    width: 60%;
+    height: 100%;
+    padding: clamp(30px, 5vw, 60px);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto !important; 
+    background: #ffffff;
+    opacity: 0;
+    transform: translateX(40px);
+    transition: opacity 0.6s ease 0.4s, transform 0.6s ease 0.4s;
+    position: relative;
+    z-index: 20;
+}
+
+.member-card.active .member-info {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.member-info h2 { 
+    color: var(--accent-text, #B35F00); 
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    font-weight: 800;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+}
+
+.member-info h3 {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 300;
+    color: var(--muted, #696969);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 1rem;
+    margin-bottom: 30px;
+}
+
+.member-info p {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    line-height: 1.8;
+    color: #444;
+    text-align: justify;
+    font-size: 1rem;
+}
+
+/* --- LA GRANDE CARTE (PANORAMIQUE) --- */
+.member-card.big-card {
+    grid-column: 1 / span 4; 
+    height: 400px;
+    position: relative;
+    overflow: visible !important; 
+    z-index: 1;
+}
+
+.big-card .card-inner {
+    position: absolute;
+    inset: 0;
+    background: #ffffff;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+    transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    z-index: 5;
+}
+
+.member-card.big-card.active .card-inner {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 80vw;
+    height: 70vh;
+    z-index: 1002;
+    box-shadow: 0 50px 120px rgba(0,0,0,0.5);
+}
+
+.big-card .image-container {
+    width: 100%;
+    height: 100%;
+    transition: width 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.member-card.big-card.active .image-container {
+    width: 40% !important;
+}
+
+.big-card .name-overlay {
+    width: 60%;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.member-card.big-card.active .name-overlay {
+    opacity: 0;
+}
+
+.big-card .member-info {
+    width: 60%;
+    height: 100%;
+    opacity: 0;
+    transform: translateX(40px);
+    transition: opacity 0.6s ease 0.4s, transform 0.6s ease 0.4s;
+    display: flex;
+    flex-direction: column;
+    padding: 60px;
+    padding-bottom: 80px; /* marge en bas pour ne pas couper le dernier élément */
+    background: #fff;
+    overflow-y: auto !important;
+    box-sizing: border-box;
+}
+
+.member-card.big-card.active .member-info {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.member-info::-webkit-scrollbar { width: 5px; }
+.member-info::-webkit-scrollbar-thumb { background: rgba(255, 140, 0, 0.3); border-radius: 10px; }
+
+/* --- RESPONSIVE --- */
+@media (max-width: 1200px) {
+    .team-grid { 
+        grid-template-columns: repeat(2, 1fr); 
+        max-width: 900px; 
+    }
+    .member-card.big-card {
+        grid-column: 1 / span 2; /* s'aligne sur les 2 colonnes réelles */
+    }
+}
+
+/* ================= RESPONSIVE MOBILE ================= */
+@media (max-width: 768px) {
+
+    .team-container {
+        padding-top: 10vh; /* sous-menu mobile un peu plus haut (peut wrap) */
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+    }
+
+    .team-grid {
+        grid-template-columns: 1fr;
+        max-width: 500px;
+        width: 100%;
+        padding: 25px 20px 60px;
+        gap: 20px;
+    }
+
+    .member-card {
+        width: 100%;
+        height: 220px;
+    }
+
+    .member-card.big-card {
+        grid-column: 1 / 2;
+        height: 220px;
+    }
+
+    .member-card.active .card-inner,
+    .member-card.big-card.active .card-inner {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 95vw !important;
+        height: 85vh !important;
+        flex-direction: column !important;
+    }
+
+    .member-card.active .image-container,
+    .member-card.big-card.active .image-container {
+        width: 100% !important;
+        height: 35% !important;
+    }
+
+    .member-card.active .member-info,
+    .member-card.big-card.active .member-info {
+        width: 100% !important;
+        height: 65%;
+        padding: 25px !important;
+        transform: translateY(0);
+    }
+
+    .name-overlay .firstname {
+        font-size: 1rem;
+    }
+
+    .name-overlay .lastname {
+        font-size: 2rem;
+    }
+}
+
+/* v12 — smartphone en paysage */
+@media (orientation: landscape) and (max-height: 500px) {
+    .team-container { padding-top: 70px; align-items: flex-start; }
+    .team-grid { gap: 16px; padding: 10px 6vw 20px; }
+    .member-card { height: 280px; }
+}
+
+/* ==========================================================================
+   v15 — PAGE AGENCE : présentation + équipe sur UNE page
+   Le texte est en haut ; en faisant défiler, une carte par membre (plus de grande carte « L'équipe au complet »).
+   ========================================================================== */
+.content-wrapper + .team-container {
+    min-height: 0;
+    padding-top: 0;
+    align-items: flex-start;
+    scroll-margin-top: 100px;
+}
+.content-wrapper:has(+ .team-container) { min-height: 0; padding-bottom: 0; }
+.content-wrapper + .team-container .team-grid { padding-top: 40px; padding-bottom: 80px; }
+@media (max-width: 768px) {
+    .content-wrapper + .team-container { padding-top: 0; scroll-margin-top: 90px; }
+}
+@media (orientation: landscape) and (max-height: 500px) {
+    .content-wrapper + .team-container { padding-top: 0; scroll-margin-top: 70px; }
+}
+
+/* ==========================================================================
+   v17 — AUCUNE ANIMATION sur les cartes (équipe et actualités) :
+   l'ouverture / la fermeture de la fiche est immédiate (transition directe).
+   ========================================================================== */
+.team-grid,
+.member-card,
+.member-card.active,
+.card-inner,
+.image-container,
+.name-overlay,
+.member-info,
+.big-card .card-inner,
+.big-card .image-container,
+.big-card .name-overlay,
+.big-card .member-info {
+    transition: none !important;
+    animation: none !important;
+}
+/* fiche : le texte est visible tout de suite, sans glissement */
+.member-info { transform: none !important; }
+.member-card.active .member-info { opacity: 1; }
+
+/* carte d'actualité sans photo : aplat neutre */
+.image-container:empty { background: #f3ebe2; }
+/* l'ancienne mise en page « news-card » n'est plus utilisée ; la date est en petit au-dessus du titre (comme le prénom) */
+.news-card2 .name-overlay .firstname { letter-spacing: 1px; }
+
+/* v17 — fond blanc derrière la fiche ouverte (équipe + actualités) */
+.team-grid.has-active::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: #fff;
+    z-index: 500;
+}
+
+/* v17 — cartes alignées sur la colonne de texte (même largeur que .boite-blanche : 1300 px, marges 30 px) */
+.content-wrapper + .team-container .team-grid { max-width: 1300px; padding-left: 0; padding-right: 0; box-sizing: border-box; }
+@media (max-width: 1320px) { .content-wrapper + .team-container .team-grid { padding-left: 25px; padding-right: 25px; } }
+
+/* v17 — cartes moins hautes (320 px) ; la fiche ouverte garde sa taille */
+.team-grid .member-card:not(.big-card) { height: 320px; }
+@media (orientation: landscape) and (max-height: 500px) { .team-grid .member-card:not(.big-card) { height: 280px; } }
+
+/* ==========================================================================
+   v17 — fiche ouverte : contrastes, clavier
+   ========================================================================== */
+/* (bouton « Fermer » retiré à la demande de l'utilisateur : un clic sur la fiche la referme) */
+/* le focus clavier d'une carte se voit sur la photo */
+.member-card:focus-visible { outline: 3px solid var(--accent-text, #B35F00); outline-offset: 4px; }
+/* la fiche ne déborde plus à droite (marges intérieures comprises dans la largeur) */
+.member-info { box-sizing: border-box; }
+/* téléphone : la fiche s'ouvre SOUS la barre du haut / le sous-menu (avant : son haut était caché derrière) */
+@media (max-width: 768px) {
+    .member-card.active .card-inner,
+    .member-card.big-card.active .card-inner {
+        top: calc(50% + 45px);
+        height: calc(100vh - 120px) !important;
+        height: calc(100dvh - 120px) !important;
+    }
+}
+/* fiche : listes et intertitres du CV lisibles */
+.member-info ul { padding-left: 1.2em; margin: 0 0 1em; color: #444; line-height: 1.7; }
+.member-info p strong { color: var(--ink, #1a1a1a); }
+/* v17 — carte SANS photo (actualités, membre sans portrait) : l'aplat beige s'affiche vraiment
+   (:empty ne marchait pas à cause des espaces dans le HTML) et le texte orange devient lisible dessus */
+.image-container:not(:has(img)) { background: #f3ebe2; }
+.member-card:not(:has(.image-container img)) .name-overlay span { color: var(--accent-text, #B35F00); }

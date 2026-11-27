@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mil Lieux — Architecture durable à Nancy</title>
+    <meta name="description" content="Mil Lieux, agence d'architecture à Nancy.">
+    <link rel="stylesheet" href="assets/styles/style_global.css">
+    <link rel="stylesheet" href="assets/styles/nav_barre.css">
+    <link rel="stylesheet" href="assets/styles/slider.css">
+    <link rel="stylesheet" href="assets/styles/texte_anim.css">
+    <link rel="stylesheet" href="assets/styles/intro.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script>
+        /* Écran d'intro : 1 fois par session (ou toujours avec ?intro dans l'adresse) */
+        (function () {
+            if (!false) return;
+            var seen = false;
+            try { seen = !!sessionStorage.getItem('ml-intro'); } catch (e) {}
+            if (!seen || location.search.indexOf('intro') !== -1) document.documentElement.classList.add('has-intro');
+        })();
+    </script>
+</head>
+<body data-root="" data-footer="off">
+    <!-- Page générée par l'outil admin/index.html — modifiable depuis l'outil (ne pas supprimer le bloc page-data en bas de page).
+         Menu, réseaux sociaux et pied de page viennent de assets/data/site-data.js (script site-shell.js). -->
+
+    <div class="slider">
+        <div class="slides" id="slider-track">
+            <img src="assets/images/Diaporama/images (1).jpg" alt="Réalisation de l'agence Mil Lieux, photo 1" fetchpriority="high">
+            <img src="assets/images/Diaporama/images (2).jpg" alt="Réalisation de l'agence Mil Lieux, photo 2" decoding="async">
+            <img src="assets/images/Diaporama/images (3).jpg" alt="Réalisation de l'agence Mil Lieux, photo 3" decoding="async">
+            <img src="assets/images/Diaporama/images (1).jpg" alt="" aria-hidden="true">
+        </div>
+    </div>
+
+    <div class="overlay">
+        <div class="typing-container">
+            <span class="text-fixe">Une architecture</span>
+            <span id="typewriter" class="typing-effect"></span>
+        </div>
+    </div>
+
+    <script type="application/json" id="page-data">{"type":"home","images":["Diaporama/images (1).jpg","Diaporama/images (2).jpg","Diaporama/images (3).jpg"],"fixe":"Une architecture","mots":["éco-responsable,","performante,","bio-sourcée,","engagée,","durable,","..."],"intro":false,"introTitre":"Mil Lieux","introSous":"","seoTitre":"Mil Lieux — Architecture durable à Nancy","seoDesc":""}</script>
+    <script src="assets/data/site-data.js"></script>
+    <script src="assets/scripts/site-shell.js"></script>
+    <script src="assets/scripts/cursor_script.js"></script>
+    <script src="assets/scripts/nav_barre.js"></script>
+    <script src="assets/scripts/intro.js"></script>
+    <script src="assets/scripts/slider.js"></script>
+    <script src="assets/scripts/texte_anim.js"></script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+/* ==========================================================================
+   v17 — SOCLE COMMUN : couleurs, fond, focus clavier, lien d'évitement
+   --accent       : orange de marque (#FF8C00) → éléments graphiques (hamburger, traits, chevrons)
+   --accent-text  : orange foncé lisible (4,6:1 sur blanc, WCAG AA) → tout TEXTE orange
+   --accent-large : orange pour les grands textes (3,9:1, AA « grand texte ») → mot animé de l'accueil
+   --muted        : gris lisible (5,5:1) à la place de #888 (3,5:1)
+   ========================================================================== */
+:root {
+    --accent: #FF8C00;
+    --accent-text: #B35F00;
+    --accent-large: #C26A00;
+    --ink: #1a1a1a;
+    --muted: #696969;
+    color-scheme: light;            /* le site est clair : pas de fond sombre imposé par le mode sombre du système */
+}
+html { background: #fff; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body { background: #fff; color: #000; }
+img { max-width: 100%; }
+
+/* Focus visible au clavier (la souris ne l'affiche pas) */
+:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 3px; }
+:focus:not(:focus-visible) { outline: none; }
+
+/* Lien « Aller au contenu » (ajouté par site-shell.js) : visible seulement au clavier */
+.skip-link {
+    position: fixed;
+    left: 16px;
+    top: -80px;
+    z-index: 100002;
+    padding: 12px 18px;
+    background: #fff;
+    color: var(--ink);
+    font-size: 0.9rem;
+    text-decoration: none;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+}
+.skip-link:focus { top: 12px; }
+
+/* Mouvements réduits (réglage du système) : animations et transitions quasi instantanées */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+*:not([class*="fa-"]) {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+}
+/* footer */
+footer {
+    width: 100%;
+    padding: 30px 20px;
+    box-sizing: border-box;
+}
+
+.copyright {
+    text-align: center;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 300;
+    color: #666666;
+}
+
+.copyright a { color: inherit; text-decoration: none; display: inline-block; padding: 8px 4px; }
+.copyright a:hover { color: var(--accent-text, #B35F00); text-decoration: underline; }
+
+.copyright p {
+    margin: 4px 0;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+}
+
+/* Curseur personnalisé */
+
+@media (pointer: fine) {
+
+    * { cursor: none !important; }
+
+    .custom-cursor {
+        width: 20px;
+        height: 20px;
+        background-color: rgba(255, 140, 0, 1);
+        border-radius: 50%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        z-index: 999999;
+        margin: -10px 0 0 -10px;   /* centré sur la pointe de la souris */
+        opacity: 0;                /* v17 : caché tant que la souris n'a pas bougé (n'apparaît plus figé en haut à gauche) */
+        transition: opacity 0.2s ease;
+        will-change: transform;
+    }
+}
+
+/* curseur caché, natif rétabli */
+@media (pointer: coarse), (pointer: none) {
+    .custom-cursor {
+        display: none !important;
+    }
+}
+@media (pointer: fine) {
+    .custom-cursor.is-visible { opacity: 1; }
+}

@@ -1,0 +1,65 @@
+/* ==========================================================================
+   ACCUEIL (v14) — la photo est CADRÉE (plus petite que l'écran) entre le bandeau du haut et le texte :
+   mêmes marges gauche/droite que le logo et le hamburger. Les photos se remplacent sans effet de glissement.
+   ========================================================================== */
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+body:has(.slider) { background: #fff; }
+
+:root {
+    --nav-h: 100px;                                   /* hauteur du bandeau du haut */
+    --frame-x: calc(var(--ham-gap, 10vw) + 8px);      /* marge gauche/droite = logo et hamburger */
+    --band-h: clamp(52px, 11vh, 110px);               /* hauteur de la zone de texte sous la photo */
+    --pad-b: clamp(12px, 3vh, 32px);                  /* respiration en bas de page */
+}
+
+.slider {
+    position: fixed;
+    top: var(--nav-h);
+    left: var(--frame-x);
+    right: var(--frame-x);
+    height: calc(100vh - var(--nav-h) - var(--band-h) - var(--pad-b));
+    height: calc(100dvh - var(--nav-h) - var(--band-h) - var(--pad-b));
+    overflow: hidden;
+    background: #f0f0f0;
+}
+
+.slides {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.slides img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    z-index: 0;
+}
+/* v18 — FONDU ENCHAÎNÉ : la nouvelle photo apparaît en douceur PAR-DESSUS l'ancienne, qui reste affichée
+   dessous jusqu'à la fin du fondu (pas de passage par le gris). Durée réglable ici (--fondu).
+   « Mouvements réduits » activé sur l'appareil : changement instantané (style_global.css). */
+.slides { --fondu: 1.6s; }
+.slides img.is-active {
+    opacity: 1;
+    z-index: 2;
+    transition: opacity var(--fondu) cubic-bezier(0.45, 0, 0.55, 1);   /* lent au début et à la fin */
+}
+.slides img.is-prev { opacity: 1; z-index: 1; }
+.slides img[aria-hidden="true"] { display: none; }
+
+@media (max-width: 768px) {
+    :root { --nav-h: 60px; --pad-b: 14px; }
+}
+@media (orientation: landscape) and (max-height: 500px) {
+    :root { --nav-h: 60px; --pad-b: 8px; }
+}

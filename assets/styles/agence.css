@@ -1,0 +1,147 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-color: #ffffff;
+}
+
+/* --- SOUS-MENU (toujours visible, collé en haut) --- */
+.sous-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 100px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 9990;
+    box-sizing: border-box;
+}
+
+.sous-menu .nav-link {
+    text-decoration: none;
+    color: var(--accent-text, #B35F00);
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    transition: opacity 0.2s ease;
+}
+
+.sous-menu .nav-link:hover {
+    opacity: 0.6;
+}
+
+.sous-menu .nav-link.active {
+    border-bottom: 2px solid rgb(255, 140, 0);
+    padding-bottom: 2px;
+}
+
+/* --- LE CONTENEUR : page blanche, texte centré --- */
+.content-wrapper {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 100px; /* hauteur de la nav fixe */
+    padding-bottom: 20px;
+    box-sizing: border-box;
+}
+
+/* --- LE BLOC DE TEXTE CENTRÉ --- */
+.boite-blanche {
+    width: 100%;
+    max-width: 1300px;
+    padding: 30px;
+    margin: 0 auto;
+}
+
+/* --- LE TEXTE À L'INTÉRIEUR --- */
+.boite-blanche p {
+    color: #000000;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-style: normal;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    margin-bottom: 15px;
+    text-align: justify;
+    font-weight: 300;
+}
+
+.boite-blanche b {
+    font-weight: 800;
+    color: var(--accent-text, #B35F00);
+}
+
+/* --- ADAPTATION MOBILE --- */
+@media (max-width: 768px) {
+    .sous-menu {
+        min-height: 60px;
+        gap: 12px;
+        padding: 10px max(var(--logo-room, 74px), calc(50px + var(--ham-gap, 10vw))); /* places réservées symétriques : logo à gauche, hamburger à droite */
+        flex-wrap: wrap;
+        row-gap: 4px;
+        box-sizing: border-box;
+    }
+    .sous-menu .nav-link {
+        font-size: 0.7rem;
+        letter-spacing: 1.8px;
+    }
+    .content-wrapper {
+        padding-top: 90px;
+    }
+    .boite-blanche {
+        width: 100%;
+        padding: 25px;
+    }
+    .boite-blanche p {
+        font-size: 16px;
+        text-align: left;
+    }
+}
+
+@media (max-width: 480px) {
+    .sous-menu {
+        gap: 10px;
+        padding: 10px max(var(--logo-room, 74px), calc(50px + var(--ham-gap, 10vw)));
+    }
+    .sous-menu .nav-link {
+        font-size: 0.65rem;
+        letter-spacing: 1.3px;
+    }
+    .boite-blanche {
+        padding: 20px;
+    }
+}
+
+/* v12 — smartphone en paysage */
+@media (orientation: landscape) and (max-height: 500px) {
+    .sous-menu { min-height: 56px; gap: 18px; padding: 8px max(var(--logo-room, 74px), calc(50px + var(--ham-gap, 10vw))); flex-wrap: wrap; row-gap: 2px; }
+    .sous-menu .nav-link { font-size: 0.7rem; letter-spacing: 1.8px; }
+    .content-wrapper { padding-top: 70px; }
+    .boite-blanche { padding: 16px 25px; }
+    .boite-blanche p { font-size: 1rem; line-height: 1.6; }
+}
+
+/* ==========================================================================
+   v17 — LISIBILITÉ ET TACTILE
+   ========================================================================== */
+/* (v17 : la limite à 75 caractères par ligne a été retirée à la demande de l'utilisateur — texte sur toute la largeur, comme avant) */
+/* liens du sous-menu : zone de toucher d'au moins 44 px de haut */
+.sous-menu .nav-link { display: inline-block; padding: 12px 4px; }
+.sous-menu .nav-link.active { padding-bottom: 2px; margin-bottom: 10px; }
+@media (max-width: 768px), (orientation: landscape) and (max-height: 500px) {
+    .sous-menu .nav-link { padding: 8px 4px; }
+    .sous-menu .nav-link.active { padding-bottom: 2px; margin-bottom: 6px; }
+}

@@ -1,0 +1,5 @@
+Plyr 3.7.8 — lecteur vidéo open source (https://github.com/sampotts/plyr), licence MIT (voir LICENSE.md).
+Copie locale téléchargée le 27/11/2026 depuis le paquet npm officiel (cdn.jsdelivr.net/npm/plyr@3.7.8).
+Fichiers utilisés par le site : plyr.css et plyr.polyfilled.min.js (chargés seulement sur les pages projet qui ont une vidéo).
+plyr.svg = icônes du lecteur ; elles sont aussi intégrées dans assets/scripts/projet-video.js (pour fonctionner en file://).
+Mise à jour : remplacer ces fichiers par ceux d'une version plus récente, puis changer AD.PLYR dans admin/types.js.
